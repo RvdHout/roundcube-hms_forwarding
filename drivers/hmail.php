@@ -71,25 +71,13 @@ class rcube_hmail_forwarding
         $obApp->Authenticate($username, $password);
         try {
             $obAccount = $obApp->Domains->ItemByName($domain)->Accounts->ItemByAddress($username);
-			$obDomain = $obApp->Domains->ItemByName($domain);
-			$obLists = $obDomain->DistributionLists();
-			$obDistributionLists = $obDomain->DistributionLists;
-			$Count = $obLists->Count();
-			$exludedaddresses = array();
-			if ($Count>0) {
-				for ($i=0; $i<$Count; $i++) {
-					$obList = $obDistributionLists->Item($i);
-					$exludedaddresses[] = $obList->Address;
-				}
-			}
 
             switch($data['action']){
                 case 'forwarding_load':
                     $fdata = array(
                         'enabled'      => $obAccount->ForwardEnabled ?: 0,
                         'address'      => $obAccount->ForwardAddress,
-                        'keeporiginal' => $obAccount->ForwardKeepOriginal ?: 0,
-						'exludedaddresses' => $exludedaddresses
+                        'keeporiginal' => $obAccount->ForwardKeepOriginal ?: 0
                     );   
                     return $fdata;
                 case 'forwarding_save':

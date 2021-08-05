@@ -97,7 +97,7 @@ class hms_forwarding extends rcube_plugin
             'address'      => rcube_utils::get_input_value('_address', rcube_utils::INPUT_POST),
             'keeporiginal' => rcube_utils::get_input_value('_keeporiginal', rcube_utils::INPUT_POST),
         );
-
+		
 		// if disabled save all current data
 		$currentData = $this->_load(array('action' => 'forwarding_load'));
 		if(!$dataToSave['enabled'] && !$dataToSave['address'] && !$dataToSave['keeporiginal'])
@@ -113,12 +113,12 @@ class hms_forwarding extends rcube_plugin
 		if ($dataToSave['address'] && !rcube_utils::check_email($dataToSave['address']))
 			$this->rc->output->command('display_message', $this->gettext('novalidemailaddress'), 'error');
 		else {
-        if (!($result = $this->_save($dataToSave))) {
-            $this->rc->output->command('display_message', $this->gettext('successfullyupdated'), 'confirmation');
-        }
-        else {
-            $this->rc->output->command('display_message', $result, 'error');
-        }
+			if (!($result = $this->_save($dataToSave))) {
+				$this->rc->output->command('display_message', $this->gettext('successfullyupdated'), 'confirmation');
+			}
+			else {
+				$this->rc->output->command('display_message', $result, 'error');
+			}
 		}		
 
         $this->register_handler('plugin.body', array($this, 'forwarding_form'));
@@ -142,7 +142,7 @@ class hms_forwarding extends rcube_plugin
 			$disabled = true;
 		}	
 		
-        $currentData = $this->_load(array('action' => 'forwarding_load'));
+		$currentData = $this->_load(array('action' => 'forwarding_load'));
 
         if (!is_array($currentData)) {
             if ($currentData == HMS_CONNECT_ERROR) {
@@ -155,11 +155,6 @@ class hms_forwarding extends rcube_plugin
             $this->rc->output->command('display_message', $error, 'error');
             return;
         }
-
-		// check if forward address is distributionlist
-		if ($config->get('hms_forwarding_exclude_distributionlists') && in_array($currentData['address'], $currentData['exludedaddresses'])) {
-			$disabled = true;
-		}
 
         $table = new html_table(array('cols' => 2, 'class' => 'propform'));
 
